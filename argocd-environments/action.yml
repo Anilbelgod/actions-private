@@ -50,8 +50,8 @@ runs:
               service-config-sm-path: "service-${{ inputs.config-app-name }}-config-${{ inputs.tenant }}"
               platform-sm-path: "platform-${{ inputs.config-app-name }}-secret-${{ inputs.tenant }}"
               cluster: "gke-${{ inputs.tenant }}-dev"
-              namespace: cch-{{ inputs.tenant }}-{{ inputs.environment }}
-              
+              namespace: "cch-${{ inputs.tenant }}-${{ inputs.environment }}"
+
       - name: Clean the namespace
         id: clean-namespace
         uses: ashley-taylor/regex-property-action@v1.3
