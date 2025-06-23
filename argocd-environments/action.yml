@@ -1,0 +1,68 @@
+name: 'Environments - ArgoCD'
+description: 'Get information about the environment'
+inputs:
+  environment:
+    description: "The environment name"
+    required: true
+  namespace:
+    description: "The namespace"
+    required: true
+  config-app-name:
+    description: "The application name for configuration purposes"
+    required: true
+  tenant:
+    description: "The tenant for the deployment"
+    required: true
+outputs:
+  name:
+    description: "The environment name"
+    value: ${{  inputs.environment }}
+  region:
+    description: "The region"
+    value: us-east4
+  service-secret-sm-path:
+    description: "The path to the service secret in Secret Manager"
+    value: ${{ steps.environment.outputs.service-secret-sm-path }}
+  service-config-sm-path:
+    description: "The path to the service config in Secret Manager"
+    value: ${{ steps.environment.outputs.service-config-sm-path }}
+  platform-sm-path:
+    description: "The path to the platform secrets per cluster in the Secret Manager"
+    value: ${{ steps.environment.outputs.platform-sm-path }}
+  cluster:
+    description: "The GKE cluster"
+    value: ${{  steps.environment.outputs.cluster }}
+  namespace:
+    description: "The namespace"
+    value: ${{  steps.change-string-case-namespace.outputs.lowercase }}
+
+runs:
+  using: "composite"
+  steps:
+      - name: Environment info
+        uses: cloudposse/github-action-yaml-config-query@0.1.0
+        id: environment
+        with:
+          query: '."${{ inputs.environment }}"'
+          config: |
+            dev: 
+              service-secret-sm-path: "service-${{ inputs.config-app-name }}-secret-${{ inputs.tenant }}"
+              service-config-sm-path: "service-${{ inputs.config-app-name }}-config-${{ inputs.tenant }}"
+              platform-sm-path: "platform-${{ inputs.config-app-name }}-secret-${{ inputs.tenant }}"
+              cluster: "gke-${{ inputs.tenant }}-dev"
+              namespace: cch-{{ inputs.tenant }}-{{ inputs.environment }}
+              
+      - name: Clean the namespace
+        id: clean-namespace
+        uses: ashley-taylor/regex-property-action@v1.3
+        with:
+          value: ${{ steps.environment.outputs.namespace }}
+          regex: "\\W"
+          replacement: "-"
+
+      - name: Change string case of the namespace
+        id: change-string-case-namespace
+        uses: ASzc/change-string-case-action@v5
+        with:
+          string: ${{ steps.clean-namespace.outputs.value }}
+
