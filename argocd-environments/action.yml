@@ -39,6 +39,11 @@ outputs:
 runs:
   using: "composite"
   steps:
+      - name: Print Config app name"
+        shell: bash 
+        run: |
+          echo "Config App Name: ${{ inputs.config-app-name }}"
+
       - name: Environment info
         uses: cloudposse/github-action-yaml-config-query@0.1.0
         id: environment
