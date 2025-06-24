@@ -46,10 +46,10 @@ runs:
           query: '."${{ inputs.environment }}"'
           config: |
             dev: 
-              service-secret-sm-path: "service-${{ inputs.config-app-name }}-secret-${{ inputs.tenant }}"
-              service-config-sm-path: "service-${{ inputs.config-app-name }}-config-${{ inputs.tenant }}"
-              platform-sm-path: "platform-${{ inputs.config-app-name }}-secret-${{ inputs.tenant }}"
-              cluster: "gke-${{ inputs.tenant }}-dev"
+              service-secret-sm-path: service-${{ inputs.config-app-name }}-secret-${{ inputs.tenant }}
+              service-config-sm-path: service-${{ inputs.config-app-name }}-config-${{ inputs.tenant }}
+              platform-sm-path: platform-${{ inputs.config-app-name }}-secret-${{ inputs.tenant }}
+              cluster: gke-${{ inputs.tenant }}-dev
               namespace: "cch-${{ inputs.tenant }}-${{ inputs.environment }}"
 
       - name: Clean the namespace
