@@ -53,7 +53,7 @@ runs:
             dev: 
               service-secret-sm-path: service-${{ inputs.config-app-name }}-secret-${{ inputs.tenant }}
               service-config-sm-path: service-${{ inputs.config-app-name }}-config-${{ inputs.tenant }}
-              platform-sm-path: platform-${{ inputs.config-app-name }}-secret-${{ inputs.tenant }}
+              platform-sm-path: platform-${{ inputs.config-app-name }}-config-${{ inputs.tenant }}
               cluster: gke-${{ inputs.tenant }}-dev
               namespace: cch-${{ inputs.tenant }}-${{ inputs.environment }}
 
@@ -71,3 +71,4 @@ runs:
         with:
           string: ${{ steps.clean-namespace.outputs.value }}
 
+ 
